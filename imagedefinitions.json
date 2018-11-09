@@ -1,0 +1,54 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "environment": [
+                {
+                    "name": "MYSQL_DATABASE",
+                    "value": "test"
+                },
+                {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "value": "root"
+                }
+            ],
+            "essential": true,
+            "image": "995513464071.dkr.ecr.us-east-1.amazonaws.com/ecr-petclinic:petclinic-db",
+            "name": "db",
+            "portMappings": [
+                {
+                    "containerPort": 3306,
+                    "hostPort": 3306
+                }
+            ]
+        },
+        {
+            "environment": [
+                {
+                    "name": "JDBC_URL",
+                    "value": "jdbc:mysql://db:3306/petclinic?connectTimeout=0&amp;socketTimeout=0&amp;autoReconnect=true"
+                },
+                {
+                    "name": "JDBC_USER",
+                    "value": "root"
+                },
+                {
+                    "name": "JDBC_PASS",
+                    "value": "root"
+                }
+            ],
+            "essential": true,
+            "image": "995513464071.dkr.ecr.us-east-1.amazonaws.com/ecr-petclinic:petclinic-web",
+            "links": [
+                "db"
+            ],
+            "name": "web",
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 80
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,87 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "environment": [
+                {
+                    "name": "MYSQL_DATABASE",
+                    "value": "test"
+                },
+                {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "value": "root"
+                },
+                {
+                    "name": "./mysql/init:/docker-entrypoint-initdb.",
+                    "value": "./mysql/init:/docker-entrypoint-initdb.d"
+                }
+            ],
+            "essential": true,
+            "image": "mysql",
+            "mountPoints": [
+                {
+                    "containerPath": "/etc/mysql/conf.d",
+                    "sourceVolume": "_Conf_D"
+                }
+            ],
+            "name": "db",
+            "memory": 128,
+            "portMappings": [
+                {
+                    "containerPort": 3306,
+                    "hostPort": 3306
+                }
+            ]
+        },
+        {
+            "environment": [
+                {
+                    "name": "JDBC_URL",
+                    "value": "jdbc:mysql://db:3306/petclinic?connectTimeout=0&amp;socketTimeout=0&amp;autoReconnect=true"
+                },
+                {
+                    "name": "JDBC_USER",
+                    "value": "root"
+                },
+                {
+                    "name": "JDBC_PASS",
+                    "value": "root"
+                }
+            ],
+            "essential": true,
+            "image": "tomcat:latest",
+            "links": [
+                "db"
+            ],
+            "mountPoints": [
+                {
+                    "containerPath": "/usr/local/tomcat/webapps",
+                    "sourceVolume": "_TomcatWebapps"
+                }
+            ],
+            "name": "web",
+            "memory": 128,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 80
+                }
+            ]
+        }
+    ],
+    "family": "",
+    "volumes": [
+        {
+            "host": {
+                "sourcePath": "conf.d"
+            },
+            "name": "_Conf_D"
+        },
+        {
+            "host": {
+                "sourcePath": "tomcat"
+            },
+            "name": "_TomcatWebapps"
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  # mysql
+  db:
+    image: petclinic-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=petclinic
+      - MYSQL_ROOT_PASSWORD=root
+
+   # tomcat
+  web:
+    image: petclinic-web
+    ports:
+      - "80:8080"
+    environment:
+#      JDBC_URL: jdbc:petclinid-db.cuqu0vm0qzav.us-east-1.rds.amazonaws.com://db:3306/petclinic?connectTimeout=0&amp;socketTimeout=0&amp;autoReconnect=true
+      JDBC_URL: jdbc:mysql://db/petclinic
+      JDBC_USER: root
+      JDBC_PASS: root
+    links:
+      - db
