@@ -7,7 +7,7 @@ phases:
       - pip install --upgrade awscli
       - echo Logging in to Amazon ECR...
       - aws --version
-      - $(aws ecr get-login --no-include-email --region us-east-1)
+      - $(aws ecr get-login --no-include-email --region ${REGION})
       - IMAGE_TAG=latest
   pre_build:
     commands:
